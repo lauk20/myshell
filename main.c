@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "parser.h"
+#include "executor.h"
 
 #define COMMAND_BUFFER 256
 
@@ -13,7 +14,7 @@ int main() {
     char * command = calloc(COMMAND_BUFFER, sizeof(char));
     fgets(command, COMMAND_BUFFER + 1, stdin);
 
-    clean(command);
-    printf("%s \n", command);
+    struct command * cmd = parse_command(command);
+    execute_command(cmd);
   }
 }

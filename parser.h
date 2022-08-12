@@ -1,3 +1,9 @@
+struct command {
+  int num_args;
+
+  char ** args;
+};
+
 /*
   Args:
     char * command: user-inputted command
@@ -5,7 +11,7 @@
   returns:
     struct ** command
 */
-struct command ** parse_command(char * command);
+struct command * parse_command(char * command);
 
 /*
   Args:
