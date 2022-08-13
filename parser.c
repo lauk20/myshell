@@ -37,14 +37,14 @@ void clean(char * command) {
   returns:
     Number of commands as delimited by ";"
 */
-int count_commands(char * command) {
+int count_commands(char * command, char * delimiter) {
   clean(command);
 
   char * command_copy = calloc(strlen(command) + 1, sizeof(char));
   strcpy(command_copy, command);
 
   int num_commands = 0;
-  while (strsep(&command_copy, ";")) {
+  while (strsep(&command_copy, delimiter)) {
     num_commands = num_commands + 1;
   }
   free(command_copy);
@@ -87,22 +87,27 @@ struct command * parse_command(char * command) {
   return cmd;
 }
 
-struct command_set * parse_command_list(char ** command_list, int num_cmds) {
-  struct command_set * set = calloc(1, sizeof(struct command_set));
-  struct command ** cmds = calloc(num_cmds, sizeof(struct command *));
-
-  int i = 0;
+void parse_command_list(char ** command_list, int num_cmds, struct command_set ** main_list) {
   char * token;
-  while (token = strsep(&command_list[i], "|")) {
-    struct command * cmd = parse_command(token);
-    cmds[i] = cmd;
-    i = i + 1;
+  int num = 0;
+  for (num = 0; num < num_cmds; num++) {
+    struct command_set * set = calloc(1, sizeof(struct command_set));
+    int command_num = count_commands(command_list[num], "|");
+    struct command ** cmds = calloc(command_num, sizeof(struct command *));
+
+    int i = 0;
+    while (token = strsep(&command_list[num], "|")) {
+      //printf("token: %s\n", token);
+      struct command * cmd = parse_command(token);
+      cmds[i] = cmd;
+      i = i + 1;
+    }
+
+    set->cmds = cmds;
+    set->num_cmds = command_num;
+
+    main_list[num] = set;
   }
-
-  set->cmds = cmds;
-  set->num_cmds = num_cmds;
-
-  return set;
 }
 
 /*
@@ -122,6 +127,6 @@ void construct_command_list(char * command, char ** cmd_list) {
     clean(token);
     cmd_list[index] = token;
     index = index + 1;
-    printf("!%s\n", token);
+    //printf("!%s\n", token);
   }
 }
