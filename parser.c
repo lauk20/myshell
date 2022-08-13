@@ -32,6 +32,28 @@ void clean(char * command) {
 
 /*
   Args:
+    char * command: user-inputted command
+
+  returns:
+    Number of commands as delimited by ";"
+*/
+int count_commands(char * command) {
+  clean(command);
+
+  char * command_copy = calloc(strlen(command) + 1, sizeof(char));
+  strcpy(command_copy, command);
+
+  int num_commands = 0;
+  while (strsep(&command_copy, ";")) {
+    num_commands = num_commands + 1;
+  }
+  free(command_copy);
+
+  return num_commands;
+}
+
+/*
+  Args:
     char * command: user-inputted command (single command such as "ls -l -a")
 
   returns:
@@ -63,4 +85,25 @@ struct command * parse_command(char * command) {
   cmd->num_args = num_args;
 
   return cmd;
+}
+
+/*
+  Args:
+    command: user-inputted command,
+    cmd_list: cmd_list to be filled with struct * command,
+
+  return:
+    void
+*/
+void construct_command_list(char * command, char ** cmd_list) {
+  clean(command);
+
+  int index = 0;
+  char * token;
+  while (token = strsep(&command, ";")) {
+    clean(token);
+    cmd_list[index] = token;
+    index = index + 1;
+    printf("!%s\n", token);
+  }
 }

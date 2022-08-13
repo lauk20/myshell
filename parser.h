@@ -1,7 +1,15 @@
+/*
+  struct to hold single command
+*/
 struct command {
   int num_args;
 
   char ** args;
+};
+
+struct command_set {
+  struct command ** cmds;
+  int num_cmds;
 };
 
 /*
@@ -13,6 +21,8 @@ struct command {
 */
 struct command * parse_command(char * command);
 
+int count_commands(char * command);
+
 /*
   Args:
     char * command: string
@@ -20,3 +30,5 @@ struct command * parse_command(char * command);
     in-place edit of command to remove all repetitive spaces
 */
 void clean(char * command);
+
+void construct_command_list(char * command, char ** cmd_list);
