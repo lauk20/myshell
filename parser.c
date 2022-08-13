@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "parser.h"
+
 /*
   Args:
     char * command: string
@@ -87,6 +88,16 @@ struct command * parse_command(char * command) {
   return cmd;
 }
 
+/*
+  Args:
+    char ** command_list: Array of commands delimited by ";",
+    int num_cmds: Number of commands delimited by ";";
+    struct command_set ** main_list: Array of struct command_set * to be modified
+
+  returns:
+    None: modifies main_list so that it is an array of struct command_set *
+          each command delimited by a ";" becomes an command_set.
+*/
 void parse_command_list(char ** command_list, int num_cmds, struct command_set ** main_list) {
   char * token;
   int num = 0;
