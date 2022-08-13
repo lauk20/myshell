@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #include "parser.h"
 
@@ -10,9 +11,6 @@ int execute_command(struct command * command) {
 
   int read = dup(input);
   int write = dup(output);
-
-
-
 
   char * cmd = command->args[0];
 
@@ -26,6 +24,10 @@ int execute_command(struct command * command) {
     exit(status);
   }
 
+  int status;
+  wait(&status);
+
+  return status;
 }
 
 int execute_command_set(struct command_set ** main_list, int num_cmds) {
