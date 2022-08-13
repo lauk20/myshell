@@ -21,6 +21,8 @@ struct command_set {
 */
 struct command * parse_command(char * command);
 
+struct command_set * parse_command_list(char ** command_list, int num_cmds);
+
 int count_commands(char * command);
 
 /*

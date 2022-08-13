@@ -87,6 +87,24 @@ struct command * parse_command(char * command) {
   return cmd;
 }
 
+struct command_set * parse_command_list(char ** command_list, int num_cmds) {
+  struct command_set * set = calloc(1, sizeof(struct command_set));
+  struct command ** cmds = calloc(num_cmds, sizeof(struct command *));
+
+  int i = 0;
+  char * token;
+  while (token = strsep(&command_list[i], "|")) {
+    struct command * cmd = parse_command(token);
+    cmds[i] = cmd;
+    i = i + 1;
+  }
+
+  set->cmds = cmds;
+  set->num_cmds = num_cmds;
+
+  return set;
+}
+
 /*
   Args:
     command: user-inputted command,

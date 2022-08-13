@@ -21,6 +21,8 @@ int main() {
     int num_cmds = count_commands(command);
     char ** cmd_list = calloc(num_cmds, sizeof(char *));
     construct_command_list(command, cmd_list);
+    struct command_set * cmd_set = parse_command_list(cmd_list, num_cmds);
+
     //struct command * cmd = parse_command(command);
 
     //execute_command(cmd, cmd_list, fd_pipe);
