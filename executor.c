@@ -4,7 +4,7 @@
 
 #include "parser.h"
 
-int execute_command(struct command * command, struct command ** command_list, int fd_pipe[2]) {
+int execute_command(struct command * command) {
   char * cmd = command->args[0];
 
   if (fork() == 0) {
@@ -15,5 +15,13 @@ int execute_command(struct command * command, struct command ** command_list, in
     }
 
     exit(status);
+  }
+}
+
+int execute_command_set(struct command_set * cmd_set) {
+  struct command ** cmds = cmd_set->cmds;
+  for (int i = 0; i < cmd_set->num_cmds; i++) {
+    struct command * cmd = cmds[i];
+    execute_command(cmd);
   }
 }

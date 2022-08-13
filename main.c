@@ -23,6 +23,7 @@ int main() {
     construct_command_list(command, cmd_list);
     struct command_set * cmd_set = parse_command_list(cmd_list, num_cmds);
 
+    execute_command_set(cmd_set);
     //struct command * cmd = parse_command(command);
 
     //execute_command(cmd, cmd_list, fd_pipe);
