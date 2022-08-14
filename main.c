@@ -31,5 +31,9 @@ int main() {
     execute_command_set(main_list, num_cmds);
     int status;
     wait(&status);
+
+    if (status == -1) {
+      error = 1;
+    }
   }
 }
