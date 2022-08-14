@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #include "parser.h"
 #include "executor.h"
@@ -26,7 +27,8 @@ int main() {
 
     execute_command_set(main_list, num_cmds);
     //struct command * cmd = parse_command(command);
-
+    int status;
+    wait(&status);
     //execute_command(cmd, cmd_list, fd_pipe);
   }
 }
