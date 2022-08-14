@@ -13,22 +13,23 @@ int main() {
   int error = 0;
 
   while (!error) {
+    //USER INPUT
     char * command = calloc(COMMAND_BUFFER, sizeof(char));
     fgets(command, COMMAND_BUFFER + 1, stdin);
     if (command[strlen(command) - 1] == '\n') {
       command[strlen(command) - 1] = '\0';
     }
 
+    //PARSING
     int num_cmds = count_commands(command, ";");
     char ** cmd_list = calloc(num_cmds, sizeof(char *));
     construct_command_list(command, cmd_list);
     struct command_set ** main_list = calloc(num_cmds, sizeof(struct command *));
     parse_command_list(cmd_list, num_cmds, main_list);
 
+    //EXECUTING
     execute_command_set(main_list, num_cmds);
-    //struct command * cmd = parse_command(command);
     int status;
     wait(&status);
-    //execute_command(cmd, cmd_list, fd_pipe);
   }
 }
