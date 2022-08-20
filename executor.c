@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <errno.h>
+#include <string.h>
 
 #include "parser.h"
 
@@ -15,16 +17,16 @@
 int execute_command(struct command * command) {
   char * cmd = command->args[0];
 
-  if (fork() == 0) {
+  int f = fork();
+  if (f == 0) {
     int status = execvp(cmd, command->args);
+    exit(errno);
+  } else {
+    int status = 0;
+    waitpid(f, &status, 0);
 
-    exit(status);
+    return WEXITSTATUS(status);
   }
-
-  int status;
-  wait(&status);
-
-  return status;
 }
 
 /*
@@ -60,7 +62,11 @@ int pipe_execute(struct command_set * set) {
     close(write);
 
     int status = execute_command(set->cmds[j]);
-    if (status == -1) {
+    if (status) {
+      dup2(input, STDIN_FILENO);
+      close(input);
+      dup2(output, STDOUT_FILENO);
+      close(output);
       return status;
     }
   }
@@ -89,7 +95,8 @@ int execute_command_set(struct command_set ** main_list, int num_cmds) {
     struct command_set * set = main_list[i];
     int status = pipe_execute(set);
 
-    if (status == -1) {
+    if (status) {
+      printf("%s\n", strerror((status)));
       return status;
     }
   }
