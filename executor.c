@@ -76,7 +76,7 @@ int pipe_execute(struct command_set * set) {
   dup2(output, STDOUT_FILENO);
   close(output);
 
-  return 1;
+  return 0;
 }
 
 /*

@@ -4,6 +4,7 @@
 struct command {
   int num_args;
   char ** args;
+  char * output_file;
 };
 
 /*

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include "parser.h"
 
@@ -81,9 +83,28 @@ struct command * parse_command(char * command) {
   }
   args[counter] = NULL;
 
+  char ** new_args = calloc(num_args + 1, sizeof(char*));
+  counter = 0;
+  char * output_file = calloc(257, sizeof(char));
+  for (int i = 0; i < num_args; i++){
+    if (strcmp(args[i], ">") == 0) {
+      i = i + 1;
+      if (i >= num_args) {
+        printf("Error\n");
+      } else {
+        strncpy(output_file, args[i], 256);
+        int fd = open(output_file, O_WRONLY | O_CREAT, 0644);
+        close(fd);
+      }
+    } else {
+      new_args[counter] = args[i];
+    }
+  }
+
   struct command * cmd = calloc(1, sizeof(struct command));
   cmd->args = args;
   cmd->num_args = num_args;
+  cmd->output_file = output_file;
 
   return cmd;
 }
