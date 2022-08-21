@@ -4,6 +4,7 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include <string.h>
+#include <fcntl.h>
 
 #include "parser.h"
 
@@ -55,7 +56,11 @@ int pipe_execute(struct command_set * set) {
       read = pipe_fd[0];
       write = pipe_fd[1];
     } else {
-      write = dup(output);
+      if (strlen(set->output_file) > 0) {
+        write = open(set->output_file, O_WRONLY);
+      } else {
+        write = dup(output);
+      }
     }
 
     dup2(write, STDOUT_FILENO);
@@ -96,6 +101,7 @@ int execute_command_set(struct command_set ** main_list, int num_cmds) {
     int status = pipe_execute(set);
 
     if (status) {
+      printf("%d\n", status);
       printf("%s\n", strerror((status)));
       return status;
     }

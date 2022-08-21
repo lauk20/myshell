@@ -13,6 +13,7 @@ struct command {
 struct command_set {
   struct command ** cmds;
   int num_cmds;
+  char * output_file;
 };
 
 /*

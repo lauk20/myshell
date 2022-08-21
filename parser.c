@@ -98,12 +98,14 @@ struct command * parse_command(char * command) {
       }
     } else {
       new_args[counter] = args[i];
+      counter = counter + 1;
     }
   }
+  new_args[counter] = NULL;
 
   struct command * cmd = calloc(1, sizeof(struct command));
-  cmd->args = args;
-  cmd->num_args = num_args;
+  cmd->args = new_args;
+  cmd->num_args = counter - 1;;
   cmd->output_file = output_file;
 
   return cmd;
@@ -129,9 +131,9 @@ void parse_command_list(char ** command_list, int num_cmds, struct command_set *
 
     int i = 0;
     while (token = strsep(&command_list[num], "|")) {
-      //printf("token: %s\n", token);
       struct command * cmd = parse_command(token);
       cmds[i] = cmd;
+      set->output_file = cmd->output_file;
       i = i + 1;
     }
 
@@ -159,6 +161,5 @@ void construct_command_list(char * command, char ** cmd_list) {
     clean(token);
     cmd_list[index] = token;
     index = index + 1;
-    //printf("!%s\n", token);
   }
 }
