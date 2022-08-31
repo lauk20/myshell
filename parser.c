@@ -86,6 +86,7 @@ struct command * parse_command(char * command) {
   char ** new_args = calloc(num_args + 1, sizeof(char*));
   counter = 0;
   char * output_file = calloc(257, sizeof(char));
+  char * input_file = calloc(257, sizeof(char));
   for (int i = 0; i < num_args; i++){
     if (strcmp(args[i], ">") == 0) {
       i = i + 1;
@@ -94,6 +95,15 @@ struct command * parse_command(char * command) {
       } else {
         strncpy(output_file, args[i], 256);
         int fd = open(output_file, O_WRONLY | O_CREAT, 0644);
+        close(fd);
+      }
+    } else if (strcmp(args[i], "<" == 0)) {
+      i = i + 1;
+      if (i >= num_args) {
+        printf("Error\n");
+      } else {
+        strncpy(input_file, args[i], 256);
+        int fd = open(input_file, O_RDONLY, 0644);
         close(fd);
       }
     } else {
@@ -107,6 +117,7 @@ struct command * parse_command(char * command) {
   cmd->args = new_args;
   cmd->num_args = counter - 1;;
   cmd->output_file = output_file;
+  //add input file to struct command
 
   return cmd;
 }
