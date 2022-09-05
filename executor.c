@@ -45,6 +45,10 @@ int pipe_execute(struct command_set * set) {
   int read = dup(input);
   int write = dup(output);
 
+  if (set->input_file) {
+    read = open(set->input_file, O_RDONLY);
+  }
+
   int j = 0;
   for (j = 0; j < set->num_cmds; j++) {
     dup2(read, STDIN_FILENO);

@@ -5,6 +5,7 @@ struct command {
   int num_args;
   char ** args;
   char * output_file;
+  char * input_file;
 };
 
 /*
@@ -14,6 +15,7 @@ struct command_set {
   struct command ** cmds;
   int num_cmds;
   char * output_file;
+  char * input_file;
 };
 
 /*

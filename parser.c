@@ -97,7 +97,7 @@ struct command * parse_command(char * command) {
         int fd = open(output_file, O_WRONLY | O_CREAT, 0644);
         close(fd);
       }
-    } else if (strcmp(args[i], "<" == 0)) {
+    } else if (strcmp(args[i], "<") == 0) {
       i = i + 1;
       if (i >= num_args) {
         printf("Error\n");
@@ -117,7 +117,7 @@ struct command * parse_command(char * command) {
   cmd->args = new_args;
   cmd->num_args = counter - 1;;
   cmd->output_file = output_file;
-  //add input file to struct command
+  cmd->input_file = input_file;
 
   return cmd;
 }
@@ -145,6 +145,7 @@ void parse_command_list(char ** command_list, int num_cmds, struct command_set *
       struct command * cmd = parse_command(token);
       cmds[i] = cmd;
       set->output_file = cmd->output_file;
+      set->input_file = cmd->input_file;
       i = i + 1;
     }
 
