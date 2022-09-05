@@ -105,7 +105,7 @@ int execute_command_set(struct command_set ** main_list, int num_cmds) {
     int status = pipe_execute(set);
 
     if (status) {
-      printf("%d\n", status);
+      //printf("%d\n", status);
       printf("%s\n", strerror((status)));
       return status;
     }
