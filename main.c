@@ -3,16 +3,25 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <limits.h>
 
 #include "parser.h"
 #include "executor.h"
 
 #define COMMAND_BUFFER 256
+#define COLOR_RED "\x1B[31m"
+#define COLOR_WHITE "\x1B[37m"
 
 int main() {
   int error = 0;
 
   while (!error) {
+    //CURRENT WORKING DIRECTORY
+    char current_working_directory[PATH_MAX + 1];
+    getcwd(current_working_directory, sizeof(current_working_directory));
+    printf("%s%s%s$ ", COLOR_RED, current_working_directory, COLOR_WHITE);
+
+
     //USER INPUT
     char * command = calloc(COMMAND_BUFFER, sizeof(char));
     fgets(command, COMMAND_BUFFER + 1, stdin);
