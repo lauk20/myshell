@@ -18,6 +18,11 @@
 int execute_command(struct command * command) {
   char * cmd = command->args[0];
 
+  if (strcmp(cmd, "cd") == 0) {
+    chdir(command->args[1]);
+    return 0;
+  }
+
   int f = fork();
   if (f == 0) {
     int status = execvp(cmd, command->args);
